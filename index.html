@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gyrai — Govern AI</title>
+<meta name="description" content="Gyrai is an open-source governance layer for AI. It checks every request from your apps and agents, applies your policy and sends structured audit events to the SIEM you already run.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600&display=swap">
+<style>
+:root{
+  --sky-1:#CBE6F9;--sky-2:#EEF7FD;--paper:#F9FCFF;
+  --ink:#0B1F3A;--ink-2:#173152;--muted:#3F5670;
+  --teal:#12A594;--teal-soft:#5FE3D2;--amber:#F2A93B;--orange:#FF7A1A;--steel:#C9D6E4;
+  --radius:22px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font:400 18px/1.6 'Figtree',system-ui,sans-serif;color:var(--ink);background:var(--paper)}
+h1,h2,h3{font-family:'Bricolage Grotesque','Figtree',sans-serif;margin:0;letter-spacing:-.02em}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--orange);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 28px}
+
+/* nav */
+nav{position:absolute;inset:0 0 auto 0;z-index:5}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:84px}
+.brand{font:800 28px 'Bricolage Grotesque',sans-serif;letter-spacing:-.03em;text-decoration:none}
+.brand b{color:var(--teal)}
+nav ul{display:flex;gap:28px;list-style:none;margin:0;padding:0;font-weight:500}
+nav ul a{text-decoration:none;color:var(--ink-2)}
+nav ul a:hover{text-decoration:underline;text-underline-offset:6px}
+
+/* hero */
+.hero{position:relative;overflow:hidden;background:linear-gradient(180deg,var(--sky-1) 0%,var(--sky-2) 78%,var(--paper) 100%);padding:132px 0 72px}
+.hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:24px;align-items:center}
+.hero h1{font-size:clamp(54px,8.4vw,104px);font-weight:800;line-height:.95}
+.hero p.lead{font-size:clamp(19px,2.1vw,23px);color:var(--ink-2);max-width:30em;margin:26px 0 0}
+.hero p.mode{font-size:17px;color:var(--muted);max-width:32em;margin:14px 0 0}
+.cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:32px}
+.btn{display:inline-block;font-weight:600;border-radius:999px;padding:14px 26px;text-decoration:none}
+.btn.solid{background:var(--ink);color:#fff}
+.btn.solid:hover{background:var(--ink-2)}
+.btn.ghost{border:2px dashed var(--ink-2);color:var(--ink-2)}
+.pron{font-size:15px;color:var(--muted);margin-top:22px}
+.stage{position:relative;min-height:470px;transform:scale(1.12);transform-origin:center}
+.stage svg{width:100%;height:auto;display:block;overflow:visible}
+.cloud{position:absolute;background:#fff;border-radius:999px;opacity:.7}
+.cloud.a{width:240px;height:64px;left:-30px;top:60px}
+.cloud.b{width:170px;height:46px;right:30px;bottom:30px}
+
+/* mascot motion */
+.bot{animation:bob 5s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-10px)}}
+.ring{transform-box:fill-box;transform-origin:center}
+.ring.x{animation:spinx 3.2s ease-in-out infinite alternate}
+.ring.y{animation:spiny 4.4s ease-in-out infinite alternate}
+@keyframes spinx{from{transform:scaleX(1)}to{transform:scaleX(.12)}}
+@keyframes spiny{from{transform:scaleY(1)}to{transform:scaleY(.12)}}
+.flame{transform-box:fill-box;transform-origin:50% 0;animation:flick .18s ease-in-out infinite alternate}
+@keyframes flick{from{transform:scaleY(1)}to{transform:scaleY(.72)}}
+.trail{stroke-dasharray:1 16;stroke-dashoffset:0;animation:draw 2.4s ease-out both}
+@keyframes draw{from{stroke-dasharray:0 2000}to{stroke-dasharray:1 16}}
+@media (prefers-reduced-motion:reduce){.bot,.ring,.flame,.trail{animation:none}}
+
+/* sections */
+section{padding:84px 0}
+section h2{font-size:clamp(34px,4.6vw,52px);font-weight:700;line-height:1.02;max-width:16em}
+.sub{color:var(--muted);max-width:38em;margin:16px 0 0;font-size:19px}
+
+/* flow */
+.flow{display:grid;grid-template-columns:1fr;gap:0;margin-top:44px}
+.flow .end{flex-direction:row;align-items:baseline;gap:14px;flex-wrap:wrap;padding:16px 22px}
+.arrow{text-align:center;font-size:28px;line-height:1.2;color:var(--teal);margin:6px 0}
+.end{display:flex;flex-direction:column;justify-content:center;gap:6px;background:#fff;border:2px solid var(--ink);border-radius:var(--radius);padding:22px;min-width:170px}
+.end strong{font:700 20px 'Bricolage Grotesque',sans-serif}
+.end span{font-size:15px;color:var(--muted)}
+.gate{margin-top:14px;position:relative;border:3px dashed var(--teal);border-radius:28px;padding:22px;background:#fff;display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.gate .tag{position:absolute;top:-17px;left:24px;background:var(--teal);color:#fff;font-weight:600;font-size:14px;border-radius:999px;padding:3px 14px}
+.step{display:flex;flex-direction:column;gap:8px}
+.step svg{width:44px;height:44px}
+.step h3{font-size:22px}
+.step p{margin:0;font-size:15.5px;color:var(--muted)}
+.modes{margin-top:30px;display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+.pill{font-weight:600;font-size:15px;border-radius:999px;padding:6px 16px}
+.pill.mon{background:var(--teal-soft);color:var(--ink)}
+.pill.enf{background:var(--amber);color:var(--ink)}
+
+/* paths */
+.dark{background:var(--ink);color:#F1F6FB}
+.dark .sub{color:#B9C9DC}
+.paths{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:44px}
+.panel{border-radius:var(--radius);padding:30px}
+.panel.in{background:#12315A;border:2px solid var(--teal-soft)}
+.panel.obs{border:2px dashed #7C93B0}
+.panel h3{font-size:28px;margin:12px 0 10px}
+.panel p{margin:0;color:#C9D8E8}
+.panel ul{margin:14px 0 0;padding-left:20px;color:#C9D8E8}
+.badge{display:inline-block;font-weight:600;font-size:14px;border-radius:999px;padding:3px 14px}
+.badge.in{background:var(--teal-soft);color:var(--ink)}
+.badge.obs{border:1.5px dashed #B9C9DC;color:#D9E5F2}
+.merge{margin-top:26px;border-left:6px solid var(--amber);padding:6px 0 6px 22px;font-size:20px;max-width:38em}
+
+/* beside + status */
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:40px}
+.tile{background:#fff;border:2px solid var(--ink);border-radius:var(--radius);padding:26px}
+.tile h3{font-size:23px;margin-bottom:8px}
+.tile p{margin:0;color:var(--muted);font-size:16.5px}
+.status{display:grid;grid-template-columns:repeat(2,1fr);gap:12px 20px;margin-top:34px}
+.row{background:#fff;border:1.5px solid var(--steel);border-radius:16px;padding:14px 18px;display:flex;gap:12px;align-items:center;font-size:16.5px}
+.chip{flex:none;font-weight:600;font-size:13px;border-radius:999px;padding:2px 12px}
+.chip.built{background:var(--teal-soft)}
+.chip.plan{border:1.5px dashed var(--orange);color:#B24A00}
+
+/* open */
+.open{background:linear-gradient(180deg,var(--paper),var(--sky-2))}
+.open .wrap{display:grid;grid-template-columns:.7fr 1.3fr;gap:36px;align-items:center}
+.open svg{width:100%;max-width:300px;height:auto}
+.lic{display:inline-block;margin-top:20px;font-weight:600;border:2px solid var(--ink);border-radius:999px;padding:6px 18px}
+
+/* footer */
+footer{background:var(--ink);color:#B9C9DC;padding:48px 0 56px;font-size:15.5px}
+.foot{display:flex;flex-wrap:wrap;gap:28px;align-items:center;justify-content:space-between}
+.logo{background:#F4F1EA;border-radius:12px;padding:10px;display:inline-block}
+.logo img{display:block;width:203px;height:auto}
+footer a{color:#fff}
+.small{font-size:13.5px;margin-top:26px;max-width:62em;line-height:1.55}
+
+@media (max-width:900px){
+  .hero .wrap,.open .wrap{grid-template-columns:1fr}
+  .stage{min-height:0;max-width:440px;margin:0 auto}
+  .flow{grid-template-columns:1fr}
+  .gate{grid-template-columns:1fr 1fr}
+  .paths,.grid3,.status{grid-template-columns:1fr}
+  nav ul{display:none}
+  .hero{padding-top:112px}
+}
+@media (max-width:520px){body{font-size:17px}.gate{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="robot" viewBox="0 0 400 470">
+      <!-- jet base + flame -->
+      <rect x="150" y="372" width="100" height="24" rx="12" fill="#C9D6E4" stroke="#0B1F3A" stroke-width="6"/>
+      <path class="flame" d="M176 400 Q200 452 224 400 Z" fill="#FF7A1A"/>
+      <path class="flame" d="M186 400 Q200 432 214 400 Z" fill="#F2A93B"/>
+      <!-- right arm with signal wand -->
+      <line x1="272" y1="238" x2="326" y2="190" stroke="#0B1F3A" stroke-width="30" stroke-linecap="round"/>
+      <line x1="272" y1="238" x2="326" y2="190" stroke="#F7FAFD" stroke-width="18" stroke-linecap="round"/>
+      <line x1="330" y1="186" x2="364" y2="120" stroke="#0B1F3A" stroke-width="16" stroke-linecap="round"/>
+      <line x1="330" y1="186" x2="364" y2="120" stroke="#F2A93B" stroke-width="8" stroke-linecap="round"/>
+      <circle cx="330" cy="188" r="15" fill="#F7FAFD" stroke="#0B1F3A" stroke-width="5"/>
+      <!-- left arm with recorder box -->
+      <line x1="128" y1="238" x2="84" y2="292" stroke="#0B1F3A" stroke-width="30" stroke-linecap="round"/>
+      <line x1="128" y1="238" x2="84" y2="292" stroke="#F7FAFD" stroke-width="18" stroke-linecap="round"/>
+      <rect x="30" y="288" width="76" height="52" rx="10" fill="#FF7A1A" stroke="#0B1F3A" stroke-width="6"/>
+      <rect x="30" y="306" width="76" height="9" fill="#fff" opacity=".85"/>
+      <circle cx="84" cy="292" r="15" fill="#F7FAFD" stroke="#0B1F3A" stroke-width="5"/>
+      <!-- torso -->
+      <rect x="116" y="204" width="168" height="172" rx="46" fill="#F7FAFD" stroke="#0B1F3A" stroke-width="6"/>
+      <circle cx="140" cy="228" r="5" fill="#C9D6E4" stroke="#0B1F3A" stroke-width="2.5"/>
+      <circle cx="260" cy="228" r="5" fill="#C9D6E4" stroke="#0B1F3A" stroke-width="2.5"/>
+      <circle cx="140" cy="352" r="5" fill="#C9D6E4" stroke="#0B1F3A" stroke-width="2.5"/>
+      <circle cx="260" cy="352" r="5" fill="#C9D6E4" stroke="#0B1F3A" stroke-width="2.5"/>
+      <!-- chest gyroscope -->
+      <circle cx="200" cy="290" r="58" fill="#0B1F3A" stroke="#12A594" stroke-width="5"/>
+      <circle cx="200" cy="290" r="44" fill="none" stroke="#C9D6E4" stroke-width="3" stroke-dasharray="3 7"/>
+      <circle class="ring x" cx="200" cy="290" r="40" fill="none" stroke="#5FE3D2" stroke-width="5"/>
+      <circle class="ring y" cx="200" cy="290" r="40" fill="none" stroke="#F2A93B" stroke-width="5"/>
+      <circle cx="200" cy="290" r="9" fill="#fff"/>
+      <!-- neck + head -->
+      <rect x="182" y="190" width="36" height="20" rx="6" fill="#0B1F3A"/>
+      <line x1="200" y1="62" x2="200" y2="30" stroke="#0B1F3A" stroke-width="6" stroke-linecap="round"/>
+      <circle cx="200" cy="24" r="11" fill="#F2A93B" stroke="#0B1F3A" stroke-width="5"/>
+      <rect x="96" y="104" width="22" height="48" rx="8" fill="#12A594" stroke="#0B1F3A" stroke-width="5"/>
+      <rect x="282" y="104" width="22" height="48" rx="8" fill="#12A594" stroke="#0B1F3A" stroke-width="5"/>
+      <rect x="108" y="62" width="184" height="134" rx="54" fill="#F7FAFD" stroke="#0B1F3A" stroke-width="6"/>
+      <rect x="126" y="90" width="148" height="76" rx="38" fill="#0B1F3A"/>
+      <circle cx="168" cy="128" r="14" fill="#5FE3D2"/>
+      <circle cx="232" cy="128" r="14" fill="#5FE3D2"/>
+      <circle cx="173" cy="122" r="4.5" fill="#fff"/>
+      <circle cx="237" cy="122" r="4.5" fill="#fff"/>
+      <path d="M186 148 Q200 160 214 148" fill="none" stroke="#5FE3D2" stroke-width="5" stroke-linecap="round"/>
+    </symbol>
+  </defs>
+</svg>
+
+<nav><div class="wrap">
+  <a class="brand" href="#top">Gyr<b>AI</b></a>
+  <ul>
+    <li><a href="#how">How it works</a></li>
+    <li><a href="#paths">Two ways in</a></li>
+    <li><a href="#status">Status</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</div></nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div>
+      <h1>Govern AI.</h1>
+      <p class="lead">Gyrai is an open-source governance layer for AI. It identifies who is using AI and how, applies your policy, and sends structured audit events to the SIEM you already run.</p>
+      <p class="mode">Every event names the person, app or agent and its owner, so your analysts and auditors work from the tools and reports they already use.</p>
+      <div class="cta">
+        <a class="btn solid" href="#how">See how it works</a>
+        <span class="btn ghost">Source code opens soon</span>
+      </div>
+      <p class="pron">Pronounced “JY-rye”.</p>
+    </div>
+    <div class="stage" aria-hidden="false">
+      <div class="cloud b"></div>
+      <svg viewBox="0 0 520 520" role="img" aria-label="Gyrai’s robot mascot hovers above a trail of linked dots, holding an orange recorder box and a glowing signal wand. A spinning gyroscope shows in its chest.">
+        <path class="trail" d="M-10 470 C 90 470, 120 430, 170 400 S 250 360, 262 330" fill="none" stroke="#0B1F3A" stroke-width="7" stroke-linecap="round"/>
+        <line x1="40" y1="40" x2="40" y2="500" stroke="#12A594" stroke-width="3" stroke-dasharray="10 10" opacity=".7"/>
+        <g class="bot"><use href="#robot" x="60" y="20" width="400" height="470"/></g>
+      </svg>
+    </div>
+  </div>
+</header>
+
+<main>
+<section id="how"><div class="wrap">
+  <h2>What happens to each request</h2>
+  <p class="sub">Your apps and agents call AI models through Gyrai. Four steps run on the way, and the result is written down.</p>
+  <div class="flow">
+    <div class="end top"><strong>Your apps and agents</strong><span>Point them at Gyrai instead of the model provider.</span></div>
+    <div class="arrow" aria-hidden="true">↓</div>
+    <div class="gate">
+      <span class="tag">Gyrai</span>
+      <div class="step">
+        <svg viewBox="0 0 44 44" fill="none" stroke="#0B1F3A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="9" width="34" height="26" rx="6"/><circle cx="16" cy="20" r="4"/><path d="M11 30c1-4 9-4 10 0M26 19h8M26 26h6"/></svg>
+        <h3>Identify</h3><p>Which person, app or agent is asking, and who sponsors it.</p>
+      </div>
+      <div class="step">
+        <svg viewBox="0 0 44 44" fill="none" stroke="#0B1F3A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="19" cy="19" r="11"/><path d="M27 27l11 11"/></svg>
+        <h3>Inspect</h3><p>Looks for sensitive data, secrets and identifiers in the prompt and the reply.</p>
+      </div>
+      <div class="step">
+        <svg viewBox="0 0 44 44" fill="none" stroke="#0B1F3A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22h12l10-12h10M18 22l10 12h10"/><path d="M33 6l5 4-5 4M33 30l5 4-5 4"/></svg>
+        <h3>Decide</h3><p>Applies your policy: allow, mask, route to a private model, or block.</p>
+      </div>
+      <div class="step">
+        <svg viewBox="0 0 44 44" fill="none" stroke="#0B1F3A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="8" width="32" height="28" rx="6"/><path d="M13 17h18M13 23h18M13 29h10"/></svg>
+        <h3>Record</h3><p>Writes who, what, where, which policy and the outcome as a structured event, and forwards it to your SIEM.</p>
+      </div>
+    </div>
+    <div class="arrow" aria-hidden="true">↓</div>
+    <div class="end"><strong>The model</strong><span>A public service, one in your cloud tenant, or a private model.</span></div>
+  </div>
+  <div class="modes">
+    <span class="pill mon">Audit</span><span>every AI request becomes an event in your SIEM.</span>
+    <span class="pill enf">Accountability</span><span>every app and agent has an owner who answers for it.</span>
+  </div>
+</div></section>
+
+<section id="paths" class="dark"><div class="wrap">
+  <h2>Two ways in, one record</h2>
+  <p class="sub">Some AI use goes through code you control. Some does not.</p>
+  <div class="paths">
+    <div class="panel in">
+      <span class="badge in">In the path</span>
+      <h3>Apps and agents you build</h3>
+      <p>Point them at Gyrai with a new address and a key. Every request and response passes through it, so policy can act before anything leaves, and each event goes to your SIEM.</p>
+      <ul><li>Each agent gets its own identity and a named sponsor.</li><li>Rules can mask, route or block.</li></ul>
+    </div>
+    <div class="panel obs">
+      <span class="badge obs">Observed</span>
+      <h3>Chat sites, copilots and vendor agents</h3>
+      <p>You cannot redirect these. Gyrai reads what your existing tools already report, then sends it to the same SIEM.</p>
+      <ul><li>Microsoft Purview and other endpoint tools</li><li>Network proxies</li><li>The vendors’ own audit logs</li></ul>
+    </div>
+  </div>
+  <p class="merge">Either way, the events land in the SIEM you already run, so “who sent what, to which model, under which policy?” is a query, not an investigation.</p>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Beyond the request</h2>
+  <p class="sub">Governing AI also means setting the rules around it.</p>
+  <div class="grid3">
+    <div class="tile"><h3>Agents have identities</h3><p>An agent is more than a service account. It acts on its own and on behalf of people, so it needs its own identity, a human sponsor and short-lived credentials.</p></div>
+    <div class="tile"><h3>Settings are policy</h3><p>Training use, retention, private chat, memory and sharing in vendor tools decide what happens to your data afterward. Write them down and check them.</p></div>
+    <div class="tile"><h3>You choose where data goes</h3><p>You pick where the log lives, who holds provider keys, and which kinds of data may reach which model.</p></div>
+  </div>
+</div></section>
+
+<section id="status" style="background:var(--sky-2)"><div class="wrap">
+  <h2>Early, and honest about it</h2>
+  <p class="sub">Gyrai is a working demonstration, not a finished product.</p>
+  <div class="status">
+    <div class="row"><span class="chip built">Built</span>Microsoft 365 collector</div>
+    <div class="row"><span class="chip built">Built</span>Inline AI gateway</div>
+    <div class="row"><span class="chip built">Built</span>Log-file ingestion and SIEM forwarder</div>
+    <div class="row"><span class="chip built">Built</span>Policy decisions and evidence reports</div>
+    <div class="row"><span class="chip plan">Planned</span>Jamf and Google collectors</div>
+    <div class="row"><span class="chip plan">Planned</span>Identity-provider tokens, tool proxy and approvals</div>
+  </div>
+</div></section>
+
+<section class="open"><div class="wrap">
+  <svg viewBox="0 0 400 470" role="img" aria-label="Gyrai robot mascot waving a signal wand"><use href="#robot"/></svg>
+  <div>
+    <h2>Open source, Apache-2.0</h2>
+    <p class="sub">The code opens soon under the Apache License 2.0, so you can run it, change it and build on it. Want to hear when it does, or try it early? Write to us.</p>
+    <span class="lic">Apache License 2.0</span>
+  </div>
+</div></section>
+</main>
+
+<footer id="contact"><div class="wrap">
+  <div class="foot">
+    <a class="logo" href="https://www.consultant.works"><img src="assets/consultant-works-logo.png" alt="Consultant Works LLC" width="203" height="69"></a>
+    <div>
+      <div>Built by Consultant Works LLC</div>
+      <div><a href="mailto:jrs@consultant.works">jrs@consultant.works</a> · <a href="https://www.consultant.works">www.consultant.works</a></div>
+    </div>
+  </div>
+  <p class="small">© 2026 Consultant Works LLC. Gyrai is an independent project and is not affiliated with or endorsed by Microsoft, Jamf or Google. Purview, Jamf and Google are trademarks of their respective owners. Gyrai supports preparation and documentation; it does not provide legal advice or guarantee any assessment, certification or legal outcome.</p>
+</div></footer>
+</body>
+</html>
