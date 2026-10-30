@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Docs — Gyrai</title>
+<meta name="description" content="How Gyrai works: a code map with diagrams of the gateway, the event store, collectors, the SIEM forwarder and the console.">
+<link rel="icon" href="../assets/gyrai-avatar.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600&display=swap">
+<style>
+:root{--sky-1:#CBE6F9;--sky-2:#EEF7FD;--paper:#F9FCFF;--ink:#0B1F3A;--ink-2:#173152;--muted:#3F5670;--teal:#12A594;--orange:#FF7A1A;--steel:#C9D6E4}
+*{box-sizing:border-box}
+body{margin:0;font:400 18px/1.6 'Figtree',system-ui,sans-serif;color:var(--ink);background:var(--paper)}
+h1,h2{font-family:'Bricolage Grotesque','Figtree',sans-serif;margin:0;letter-spacing:-.02em}
+a{color:var(--ink-2)}
+:focus-visible{outline:3px solid var(--orange);outline-offset:3px;border-radius:6px}
+.wrap{max-width:980px;margin:0 auto;padding:0 28px}
+header{background:linear-gradient(180deg,var(--sky-1),var(--sky-2));padding:22px 0 48px}
+header .bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:40px}
+.brand{font:800 28px 'Bricolage Grotesque',sans-serif;letter-spacing:-.03em;text-decoration:none;color:var(--ink)}
+.brand b{color:var(--teal)}
+header nav a{margin-left:24px;font-weight:500;text-decoration:none}
+header nav a:hover{text-decoration:underline;text-underline-offset:6px}
+h1{font-size:clamp(40px,6vw,64px);font-weight:800;line-height:1}
+.sub{color:var(--ink-2);max-width:36em;margin:16px 0 0}
+main{padding:40px 0 24px}
+main>.wrap>p{max-width:44em}
+.toc{background:#fff;border:1px solid var(--steel);border-radius:18px;padding:18px 26px;margin:28px 0 8px}
+.toc ol{margin:6px 0 0;padding-left:22px}
+.toc li{padding:2px 0}
+table{border-collapse:collapse;width:100%;margin:20px 0;font-size:16px}
+th,td{text-align:left;vertical-align:top;padding:10px 14px;border-bottom:1px solid var(--steel)}
+th{font-weight:600;background:var(--sky-2)}
+code{font:500 .88em ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:var(--sky-2);padding:1px 6px;border-radius:6px;overflow-wrap:anywhere}
+section{margin-top:56px;scroll-margin-top:16px}
+section h2{font-size:clamp(26px,3.4vw,36px);font-weight:700;margin-bottom:12px}
+section p{max-width:44em}
+figure{margin:20px 0;background:#fff;border:1px solid var(--steel);border-radius:18px;padding:18px;overflow-x:auto;text-align:center}
+figure img{max-width:100%;height:auto}
+figcaption{font-size:14px;color:var(--muted);margin-top:8px}
+footer{border-top:1px solid var(--steel);margin-top:64px;padding:28px 0 48px;color:var(--muted);font-size:16px}
+@media(max-width:600px){body{font-size:17px}.wrap{padding:0 16px}header nav a{margin-left:14px}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="bar"><a class="brand" href="../">Gyr<b>AI</b></a><nav><a href="../">Home</a><a href="https://github.com/Gyrai/gyrai" rel="noopener">Source code</a></nav></div>
+  <h1>Docs</h1>
+  <p class="sub">How Gyrai works, drawn from the code.</p>
+</div></header>
+<main><div class="wrap">
+<p>This page shows how a request moves through the code. Each box names the file or function you can open to follow along.</p>
+<p>Gyrai has four programs. They share one event format (<code>schemas/audit-event.schema.json</code>) and meet at the API.</p>
+<table><thead><tr><th>Program</th><th>Folder</th><th>Job</th></tr></thead><tbody><tr><td>Gateway</td><td><code>gateway/gw/</code></td><td>Sits between an app and the AI model. Scans each request, applies policy, forwards it and audits it.</td></tr><tr><td>Collectors</td><td><code>collectors/aicp_collectors/</code></td><td>Read logs from tools Gyrai cannot sit in front of (Microsoft 365, log files) and turn them into events.</td></tr><tr><td>API and console</td><td><code>api/app/</code></td><td>Validates and stores events, keeps the AI inventory, builds evidence reports and serves the web console.</td></tr><tr><td>Forwarder</td><td><code>forwarder/fwd/</code></td><td>Copies stored events to a SIEM.</td></tr></tbody></table>
+<p>Policy decisions come from OPA, which runs the rules in <code>policies/advisory.rego</code>.</p>
+<nav class="toc" aria-label="Diagrams"><strong>Diagrams</strong><ol><li><a href="#d1">The whole system</a></li><li><a href="#d2">One chat request through the gateway</a></li><li><a href="#d3">How an event is stored</a></li><li><a href="#d4">How a collector works</a></li><li><a href="#d5">How events reach the SIEM</a></li><li><a href="#d6">Who can do what in the console</a></li></ol></nav>
+<section id="d1">
+<h2>The whole system</h2>
+
+<figure><a href="diagrams/d1.svg" aria-label="Open diagram 1 full size"><img src="diagrams/d1.svg" alt="Diagram: The whole system" loading="lazy"></a><figcaption>Select the diagram to open it full size.</figcaption></figure>
+
+</section>
+<section id="d2">
+<h2>One chat request through the gateway</h2>
+<p>The path in <code>gateway/gw/main.py</code>, <code>chat_completions()</code>. Everything the gateway does happens here, in this order.</p>
+<figure><a href="diagrams/d2.svg" aria-label="Open diagram 2 full size"><img src="diagrams/d2.svg" alt="Diagram: One chat request through the gateway" loading="lazy"></a><figcaption>Select the diagram to open it full size.</figcaption></figure>
+<p>If the API is down, <code>audit.py</code> writes the events to a local fallback file instead of losing them.</p>
+</section>
+<section id="d3">
+<h2>How an event is stored</h2>
+<p>Every event from every source goes through <code>ingest_event()</code> in <code>api/app/ingest.py</code>.</p>
+<figure><a href="diagrams/d3.svg" aria-label="Open diagram 3 full size"><img src="diagrams/d3.svg" alt="Diagram: How an event is stored" loading="lazy"></a><figcaption>Select the diagram to open it full size.</figcaption></figure>
+<p><code>verify_chain()</code> in the same file re-computes the chain from the start. If anyone changed or removed a stored event, the check reports the first record that no longer matches.</p>
+</section>
+<section id="d4">
+<h2>How a collector works</h2>
+
+<figure><a href="diagrams/d4.svg" aria-label="Open diagram 4 full size"><img src="diagrams/d4.svg" alt="Diagram: How a collector works" loading="lazy"></a><figcaption>Select the diagram to open it full size.</figcaption></figure>
+<p>Adding a new source means writing one class that implements <code>fetch()</code> and <code>normalize()</code>. See the top of <code>collectors/aicp_collectors/base.py</code>.</p>
+</section>
+<section id="d5">
+<h2>How events reach the SIEM</h2>
+
+<figure><a href="diagrams/d5.svg" aria-label="Open diagram 5 full size"><img src="diagrams/d5.svg" alt="Diagram: How events reach the SIEM" loading="lazy"></a><figcaption>Select the diagram to open it full size.</figcaption></figure>
+<p>Because the checkpoint only moves after all outputs accept a batch, a SIEM outage causes a delay and never a gap. Delivery is &quot;at least once&quot;, so a SIEM may see an event twice, and <code>event_id</code> is the key to remove duplicates.</p>
+</section>
+<section id="d6">
+<h2>Who can do what in the console</h2>
+
+<figure><a href="diagrams/d6.svg" aria-label="Open diagram 6 full size"><img src="diagrams/d6.svg" alt="Diagram: Who can do what in the console" loading="lazy"></a><figcaption>Select the diagram to open it full size.</figcaption></figure>
+<p>Every login, logout, password change and inventory edit becomes an audit event too, so the tool&#x27;s own use is part of the record.</p>
+</section>
+
+</div></main>
+<footer><div class="wrap">The same code map lives in the repository as <a href="https://github.com/Gyrai/gyrai/blob/main/docs/ARCHITECTURE.md" rel="noopener">docs/ARCHITECTURE.md</a>. Gyrai is open source under the Apache License 2.0.</div></footer>
+</body>
+</html>
